@@ -3,12 +3,17 @@ package com.catalogo.entities;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -26,9 +31,15 @@ public class Pelicula implements Serializable{
 	
 	@Column(name = "fecha_estreno")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaEstreno;
+	
+	@OneToOne
 	private Genero genero;
-	//private List<Actor> protagonistas;
+	
+	@ManyToMany
+	private List<Actor> protagonistas;
+
 	public Long getId() {
 		return id;
 	}
@@ -53,11 +64,11 @@ public class Pelicula implements Serializable{
 	public void setGenero(Genero genero) {
 		this.genero = genero;
 	}
-	/*public List<Actor> getProtagonistas() {
+	public List<Actor> getProtagonistas() {
 		return protagonistas;
 	}
 	public void setProtagonistas(List<Actor> protagonistas) {
 		this.protagonistas = protagonistas;
-	}*/
+	}
 	
 }
