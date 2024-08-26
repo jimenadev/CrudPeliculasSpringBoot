@@ -1,6 +1,7 @@
 package com.catalogo.controllers;
 
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +29,6 @@ public class PeliculasController {
 	@GetMapping("/pelicula/{id}")
 	public String editar(@PathVariable(name="id") Long id) {
 		Pelicula pelicula = new Pelicula();
-		model.addAttribute("pelicula", pelicula);
-		model.addAttribute("titulo", "Nueva Película");
 		return "pelicula";
 	}
 	
