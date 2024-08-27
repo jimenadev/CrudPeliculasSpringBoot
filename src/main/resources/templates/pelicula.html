@@ -11,16 +11,19 @@
 			  <div class="mb-3">
 			    <label for="nombre" class="form-label">Nombre</label>
 			    <input type="text" class="form-control" id="nombre" th:field="*{nombre}">
+				<div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
 			  </div>
 			  <div class="mb-3">
 			  	<label for="fecha_estreno" class="form-label">Fecha Estreno</label>
 			  	<input type="date" class="form-control" id="fecha_estreno" th:field="*{fechaEstreno}">
+				<div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaEstreno')}" th:errors="*{fechaEstreno}"></div>
 			  </div>
 			  <div class="mb-3">
 			  	<label for="genero" class="form-label">Género</label>
 			  	<select class="form-select" th:field="*{genero}">
 					<option th:each="genero : ${generos}" th:text="${genero.nombre}" th:value="${genero.id}" ></option>
 				</select>
+				<div class="invalid-feedback d-block" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
 			  </div>
 			  <div class="mb-3">
 			  	<label for="protagonistas" class="form-label">Actor</label>

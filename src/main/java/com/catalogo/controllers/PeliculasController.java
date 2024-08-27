@@ -1,10 +1,8 @@
 package com.catalogo.controllers;
 
-import java.sql.Date;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +21,8 @@ import com.catalogo.entities.Pelicula;
 import com.catalogo.services.IActorService;
 import com.catalogo.services.IGeneroService;
 import com.catalogo.services.IPeliculaService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class PeliculasController {
@@ -57,12 +58,19 @@ public class PeliculasController {
 	}
 	
 	@PostMapping("/pelicula")
-	public String guardar(Pelicula pelicula, @ModelAttribute(name="ids") String ids) throws ParseException {
-		System.out.println("------>"+ ids);
+	public String guardar(@Valid Pelicula pelicula, BindingResult br, @ModelAttribute(name="ids") String ids, Model model) throws ParseException {
+		
+		if(br.hasErrors()) {
+			model.addAttribute("generos", this.generoService.findAll());
+			model.addAttribute("actores", this.actorService.findAll());
+			return "pelicula";
+		}
+		
 		List<Long> idsActores = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
 		List<Actor> actores = this.actorService.findAllById(idsActores);
 		pelicula.setProtagonistas(actores);
 		this.peliculaService.save(pelicula);
+		
 		return "redirect:home";
 	}
 	

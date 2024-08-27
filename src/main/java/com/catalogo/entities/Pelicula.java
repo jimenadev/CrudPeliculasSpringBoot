@@ -2,6 +2,7 @@ package com.catalogo.entities;
 
 import java.io.Serializable;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "peliculas")
@@ -27,14 +30,18 @@ public class Pelicula implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotEmpty(message = "El nombre es obligatorio")
 	private String nombre;
 	
 	@Column(name = "fecha_estreno")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@NotNull(message = "La fecha estreno es obligatorio")
 	private Date fechaEstreno;
 	
 	@OneToOne
+	@NotNull(message = "El genero es obligatorio")
 	private Genero genero;
 	
 	@ManyToMany
