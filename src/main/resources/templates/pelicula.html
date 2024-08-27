@@ -33,16 +33,30 @@
 			  	</select>
 			  </div>
 			  <div class="mb-3">
+				<div id="vista_previa" class="d-none mb-2"></div>
 				<label for="imagen" class="form-label">Imagen</label>
 				<input type="file"  id="archivo" name="archivo" onchange="previsualizar()" />
-				<div id="vista_previa" class="d-none">
-					
-				</div>
 			 </div>
-				<input id="ids" name="ids" type="hidden" value="">
+				<input id="ids" name="ids" type="hidden" th:value="${ids}">
+				<input id="id" name="id" type="hidden" value="" th:field="*{id}">
+				<input id="imagen" name="imagen" type="hidden" value="" th:field="*{imagen}">
 				<div id="protagonistas-container" class="row"></div>
 			  <button type="submit" class="btn btn-primary float-end">Guardar</button>
 			</form>
 		</div>
 	</body>
+
+<script>
+	$(function(){
+		let ids = $("#ids").val();
+		let arr = ids.split(",");
+		$("#ids").val("");
+		
+		arr.forEach(id => {
+			$("#protagonistas").val(id);
+			actorSelected($("#protagonistas")[0]);
+		})
+		
+	})
+</script>
 </html>

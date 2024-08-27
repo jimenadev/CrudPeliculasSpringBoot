@@ -56,8 +56,19 @@ public class PeliculasController {
 	
 	@GetMapping("/pelicula/{id}")
 	public String editar(@PathVariable(name="id") Long id, Model model) {
-		Pelicula pelicula = new Pelicula();
+		Pelicula pelicula = this.peliculaService.findById(id);
+		String ids = "";
+		
+		for (Actor actor : pelicula.getProtagonistas()) {
+			if("".equals(ids)) {
+				ids = actor.getId().toString();
+			}else {
+				ids = ids +"," + actor.getId().toString();
+			}
+		}
+		
 		model.addAttribute("pelicula", pelicula);
+		model.addAttribute("ids",ids);
 		model.addAttribute("generos", this.generoService.findAll());
 		model.addAttribute("actores", this.actorService.findAll());
 		model.addAttribute("titulo", "Editar Película");
@@ -85,9 +96,12 @@ public class PeliculasController {
 			pelicula.setImagen("default.jpg");
 		}
 		
-		List<Long> idsActores = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
-		List<Actor> actores = this.actorService.findAllById(idsActores);
-		pelicula.setProtagonistas(actores);
+		if(ids != null && !"".equals(ids)) {
+			List<Long> idsActores = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+			List<Actor> actores = this.actorService.findAllById(idsActores);
+			pelicula.setProtagonistas(actores);
+		}
+		
 		this.peliculaService.save(pelicula);
 		
 		return "redirect:home";
@@ -99,6 +113,13 @@ public class PeliculasController {
 		//model.addAttribute("msj", "Catálogo actualizado a 2024");
 		//model.addAttribute("tipoMsj", "success");
 		return "home";
+	}
+	
+	@GetMapping({"/listado"})
+	public String listado(Model model) {
+		model.addAttribute("titulo", "Listado de Películas");
+		model.addAttribute("peliculas", this.peliculaService.findAll());
+		return "listado";
 	}
 	
 	private String getExtension(String archivo) {
