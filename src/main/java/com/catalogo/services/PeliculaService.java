@@ -31,7 +31,7 @@ public class PeliculaService implements IPeliculaService {
 
 	@Override
 	public void delete(Long id) {
-		this.repo.deleteById(null);
+		this.repo.deleteById(id);
 	}
 
 }

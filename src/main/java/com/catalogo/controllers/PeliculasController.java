@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.catalogo.entities.Actor;
 import com.catalogo.entities.Pelicula;
@@ -116,14 +117,31 @@ public class PeliculasController {
 	}
 	
 	@GetMapping({"/listado"})
-	public String listado(Model model) {
+	public String listado(Model model, @RequestParam(required=false) String msj, @RequestParam(required=false) String tipoMsj) {
 		model.addAttribute("titulo", "Listado de Películas");
 		model.addAttribute("peliculas", this.peliculaService.findAll());
+		
+		if(!"".equals(tipoMsj) && !"".equals(msj)) {
+			model.addAttribute("msj", msj);
+			model.addAttribute("tipoMsj", tipoMsj);
+		}
+		
 		return "listado";
+	}
+	
+	@GetMapping("/pelicula/{id}/delete")
+	public String eliminar(@PathVariable(name="id") Long id, Model model, RedirectAttributes redirectAtt) {
+		String nombrePelicula = this.peliculaService.findById(id).getNombre();
+		this.peliculaService.delete(id);
+		redirectAtt.addAttribute("msj", "La película "+nombrePelicula+ " fue eliminada correctamente");
+		redirectAtt.addAttribute("tipoMsj", "success");
+		return "redirect:/listado";
 	}
 	
 	private String getExtension(String archivo) {
 		return archivo.substring(archivo.lastIndexOf("."));
 	}
+	
+
 		
 }
