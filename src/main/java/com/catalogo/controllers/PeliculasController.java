@@ -76,11 +76,10 @@ public class PeliculasController {
 	
 	@GetMapping({"/", "/home", "/index"})
 	public String home(Model model) {
+		model.addAttribute("peliculas", this.peliculaService.findAll());
 		model.addAttribute("msj", "Catálogo actualizado a 2024");
 		model.addAttribute("tipoMsj", "success");
 		return "home";
 	}
-	
-	
-	
+		
 }

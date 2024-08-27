@@ -6,7 +6,25 @@
 		<header th:insert="~{layouts/header :: header}">
 		</header>
 		<div class="container">
-			<h2>Home</h2>
+			<div class="row row-cols-1 row-cols-md-6 g-4">
+			  <div class="col" th:each="pelicula : ${peliculas}">
+			    <div class="card">
+			      <img src="https://as01.epimg.net/epik/imagenes/2020/06/11/portada/1591890687_174555_1591890899_noticia_normal_recorte1.jpg" class="card-img-top" alt="foto">
+			      <div class="card-body">
+			        <h5 class="card-title" th:text="${pelicula.nombre}"></h5>
+			        <p class="card-text" th:text="${pelicula.genero.nombre}"></p>
+					<div class="catalogo-actor-container" th:each="protagonista : ${pelicula.protagonistas}">
+						<div class="catalogo-actor-imagen" th:style="'background-image:url('+ ${protagonista.urlImagen} +')'">
+							
+						</div>
+						<div class="catalogo-actor-texto" th:text="${protagonista.nombre}">
+													
+						</div>
+					</div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 		</div>
 	</body>
 </html>
