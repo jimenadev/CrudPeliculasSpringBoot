@@ -7,8 +7,11 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -109,8 +112,21 @@ public class PeliculasController {
 	}
 	
 	@GetMapping({"/", "/home", "/index"})
-	public String home(Model model) {
-		model.addAttribute("peliculas", this.peliculaService.findAll());
+	public String home(Model model, @RequestParam(name="pagina", required=false, defaultValue = "0") Integer pagina) {
+		
+		PageRequest pr = PageRequest.of(pagina, 12);
+		Page<Pelicula> page = this.peliculaService.findAll(pr);
+		
+		model.addAttribute("peliculas", page.getContent());
+		
+		if(page.getTotalPages()>0) {
+			List<Integer> paginas = IntStream.rangeClosed(1, page.getTotalPages()).boxed().toList();
+			model.addAttribute("paginas", paginas);
+		}
+		
+		model.addAttribute("actual", pagina +1);
+		model.addAttribute("titulo", "Catálogo de Películas");
+		
 		//model.addAttribute("msj", "Catálogo actualizado a 2024");
 		//model.addAttribute("tipoMsj", "success");
 		return "home";

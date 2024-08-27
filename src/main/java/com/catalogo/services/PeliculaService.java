@@ -3,6 +3,8 @@ package com.catalogo.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.catalogo.dao.IPeliculaRepository;
@@ -11,6 +13,7 @@ import com.catalogo.entities.Pelicula;
 @Service
 public class PeliculaService implements IPeliculaService {
 	
+
 	@Autowired
 	private IPeliculaRepository repo;
 
@@ -27,6 +30,11 @@ public class PeliculaService implements IPeliculaService {
 	@Override
 	public List<Pelicula> findAll() {
 		return (List<Pelicula>) this.repo.findAll();
+	}
+	
+	@Override
+	public Page<Pelicula> findAll(Pageable pageble) {
+		return this.repo.findAll(pageble);
 	}
 
 	@Override

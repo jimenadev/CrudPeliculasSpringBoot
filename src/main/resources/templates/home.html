@@ -6,7 +6,8 @@
 		<header th:insert="~{layouts/header :: header}">
 		</header>
 		<div class="container">
-			<div class="row row-cols-1 row-cols-md-6 g-4">
+			<h1 th:text="${titulo}" class="text-center mt-4"></h1>
+			<div class="row row-cols-1 row-cols-md-6 g-4 mb-4 mt-4">
 			  <div class="col" th:each="pelicula : ${peliculas}">
 			    <div class="card">
 			      <img th:src="@{${'/archivo?n='} + ${pelicula.imagen == null ? 'default.jpg' : pelicula.imagen }}" class="card-img-top" alt="foto">
@@ -25,6 +26,13 @@
 			    </div>
 			  </div>
 			</div>
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			    <li class="page-item"  th:each="pagina : ${paginas}" th:classappend="${pagina == actual ? 'active' : ''}">
+					<a class="page-link" th:href="@{'/home?pagina='+ ${pagina - 1}}" th:text="${pagina}" >1</a>
+				</li>
+			  </ul>
+			</nav>
 		</div>
 	</body>
 </html>
